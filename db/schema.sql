@@ -1,9 +1,7 @@
 -- Enable UUID generation
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
--- ======================
 -- 1. USERS
--- ======================
 CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
@@ -11,9 +9,8 @@ CREATE TABLE users (
     created_at TIMESTAMPTZ DEFAULT now()
 );
 
--- ======================
 -- 2. ACCOUNTS
--- ======================
+
 CREATE TABLE accounts (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -22,9 +19,9 @@ CREATE TABLE accounts (
     created_at TIMESTAMPTZ DEFAULT now()
 );
 
--- ======================
+
 -- 3. TRANSACTIONS
--- ======================
+
 CREATE TABLE transactions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -32,9 +29,9 @@ CREATE TABLE transactions (
     created_at TIMESTAMPTZ DEFAULT now()
 );
 
--- ======================
+
 -- 4. LEDGER ENTRIES (CORE)
--- ======================
+
 CREATE TABLE ledger_entries (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     transaction_id UUID NOT NULL REFERENCES transactions(id) ON DELETE CASCADE,
@@ -66,6 +63,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- CREATE OR REPLACE FUNCTION validate_transaction_balance()
+-- Kindly ignore this above line
 RETURNS TRIGGER AS $$
 DECLARE
     debit_sum NUMERIC;
