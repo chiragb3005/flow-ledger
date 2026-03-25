@@ -109,3 +109,9 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE TRIGGER check_transaction_balance
+AFTER INSERT OR UPDATE ON ledger_entries
+FOR EACH ROW
+EXECUTE FUNCTION validate_transaction_balance();
+
+DROP TRIGGER IF EXISTS check_transaction_balance ON ledger_entries;
